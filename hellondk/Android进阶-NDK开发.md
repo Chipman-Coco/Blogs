@@ -11,7 +11,7 @@
 - **游戏开发**：许多高性能游戏需要复杂的图形渲染和物理计算，使用 C/C++ 可以显著提高性能。
 - **图像处理**：图像处理算法，如滤波、边缘检测等，使用 C/C++ 可以更快地处理大批量数据。
 
-**2、多媒体处理**
+**2、多媒体处理** 
 
 - **音频处理**：实时音频处理需要低延迟和高效的计算能力，C/C++ 更适合这种场景。
 
@@ -43,29 +43,29 @@
 
 2. 依次选择 **File > Settings > Appearance & Behavior > System Settings > Android SDK**。
 
-<img src="D:/chaipeng/Documents/Blog/image-20240522114114868.png" alt="image-20240522114114868" style="zoom: 80%;" />
+<img src="C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525095624980.png" alt="image-20240525095624980" style="zoom:80%;" />
 
-<img src="D:/chaipeng/Documents/Blog/image-20240522135130032.png" alt="image-20240522135130032" style="zoom:80%;" />
+<img src="C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525100424726.png" alt="image-20240525100424726" style="zoom:80%;" />
 
 3. 在 **SDK Tools** 选项卡下，展开 **NDK (Side by side)** 和 **CMake**，各自选择其中一个版本勾选（可以选择最新版本），然后点击 **Apply**。
 
-   ![image-20240522135512862](D:/chaipeng/Documents/Blog/image-20240522135512862.png)
+   ![image-20240525100553129](C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525100553129.png)
 
-   ![image-20240522135548514](D:/chaipeng/Documents/Blog/image-20240522135548514.png)
+   ![image-20240525100642329](C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525100642329.png)
 
 ### **2、创建新项目并配置NDK**
 
 1. 创建一个新的 Android 项目，选择 **Native C++** 模板。
 
-<img src="D:/chaipeng/Documents/Blog/image-20240522140052525.png" alt="image-20240522140052525" style="zoom:80%;" />
+<img src="C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525100736730.png" alt="image-20240525100736730" style="zoom:80%;" />
 
 我这里创建的项目名称叫`HelloNdk`，然后点击`Next`。
 
-<img src="D:/chaipeng/Documents/Blog/image-20240522140834276.png" alt="image-20240522140834276" style="zoom:80%;" />
+<img src="C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525100857872.png" alt="image-20240525100857872" style="zoom:80%;" />
 
 最后直接点击`Finish`，然后等待工程创建完成即可。
 
-<img src="D:/chaipeng/Documents/Blog/image-20240522141439548.png" alt="image-20240522141439548" style="zoom:80%;" />
+<img src="C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525101236277.png" alt="image-20240525101236277" style="zoom:80%;" />
 
 2. 在创建的项目 `app/build.gradle` 文件中，会包含以下配置：
 
@@ -180,15 +180,41 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 
 Java Native Interface (`JNI`) 是 Java 与 C/C++ 代码交互的桥梁。了解 `JNI` 是使用 NDK 的基础。上述内容中讲解了`JNI`函数的**静态注册**和**动态注册**，下面我们再学习它的其它内容。
 
-### 1、JNI数据类型
+### 1、数据类型转换、方法签名
 
-Java 和 C/C++ 之间的数据类型需要映射：
+**基本数据类型转换：**
 
-- `jint` 对应 `int`
-- `jfloat` 对应 `float`
-- `jstring` 对应 `String`
+| Java类型 | JNI类型  | Type Signature（类型签名） |
+| :------: | :------: | :------------------------: |
+|   byte   |  jbyte   |             B              |
+|   char   |  jchar   |             C              |
+|  double  | jdouble  |             D              |
+|  float   |  jfloat  |             F              |
+|   int    |   jint   |             I              |
+|  short   |  jshort  |             S              |
+|   long   |  jlong   |             J              |
+| boolean  | jboolean |             Z              |
+|   void   |   void   |             V              |
 
-### 2、JNI函数
+**引用数据类型转换：**
+
+| Java类型  |    JNI类型    | Type Signature（类型签名） |
+| :-------: | :-----------: | :------------------------: |
+|  Object   |    jobject    |          L+类名+;          |
+|   Class   |    jclass     |     Ljava/lang/Class;      |
+|  String   |    jstring    |     Ljava/lang/String;     |
+| Throwable |  jthrowable   |   Ljava/lang/Throwable;    |
+| Object[]  | jobjectArray  |         [L+类名+;          |
+|  byte[]   |  jbyteArray   |             [B             |
+|  char[]   |  jcharArray   |             [C             |
+| double[]  | jdoubleArray  |             [D             |
+|  float[]  |  jfloatArray  |             [F             |
+|   int[]   |   jintArray   |             [I             |
+|  short[]  |  jshortArray  |             [S             |
+|  long[]   |  jlongArray   |             [J             |
+| boolean[] | jbooleanArray |             [Z             |
+
+### 2、JNI函数注册
 
 JNI函数分为**静态注册**和**动态注册**两种（示例代码使用的是**静态注册**的方式）：
 
@@ -198,6 +224,10 @@ JNI函数分为**静态注册**和**动态注册**两种（示例代码使用的
 // 函数名必须遵循以下规则：
 Java_<package>_<class>_<method>
 ```
+
+- `package` 是包名，使用下划线替代点。
+- `class` 是类名。
+- `method` 是方法名。
 
 如下，`Java_com_example_myapplication_MainActivity_stringFromJNI` 表示 `com.example.myapplication.MainActivity` 类中的 `stringFromJNI` 方法。
 
@@ -210,15 +240,11 @@ Java_me_marko_hellondk_MainActivity_stringFromJNI(JNIEnv *env, jobject /* this *
 }
 ```
 
-- `package` 是包名，使用下划线替代点。
-- `class` 是类名。
-- `method` 是方法名。
-
 （2）**动态注册**：允许在运行时注册本地方法，而不是通过函数名的命名约定。这对于方法名的重命名、重载和跨类方法调用非常有用。
 
 - 定义本地方法。
 
-- 创建一个包含方法名、方法签名和函数指针的数组。
+- 创建一个包含**方法名**、**方法签名**和**函数指针**的数组。
 
 - 在 `JNI_OnLoad` 函数中调用 `JNIEnv` 的 `RegisterNatives` 方法注册这些方法。
 
@@ -228,10 +254,12 @@ Java_me_marko_hellondk_MainActivity_stringFromJNI(JNIEnv *env, jobject /* this *
 package com.example.myapplication;
 
 public class MainActivity extends AppCompatActivity {
+    
     static {
         System.loadLibrary("native-lib");
     }
 
+    // 对应下面C++文件中的Native方法
     public native String stringFromJNI();
 }
 ```
@@ -240,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
 #include <jni.h>
 #include <string>
 
+// 定义Native方法
 jstring stringFromJNI(JNIEnv* env, jobject /* this */) {
     std::string hello = "Hello from C++";
     return env->NewStringUTF(hello.c_str());
@@ -247,20 +276,28 @@ jstring stringFromJNI(JNIEnv* env, jobject /* this */) {
 
 // 定义方法数组
 static JNINativeMethod methods[] = {
+    // {"方法名", "方法签名", "函数指针"}
     {"stringFromJNI", "()Ljava/lang/String;", (void*)stringFromJNI}
 };
 
 // 动态注册方法
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     JNIEnv* env;
-    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
+    // 获取JNIEnv
+    jint getEnvResult = vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
+    if (getEnvResult != JNI_OK) {
         return JNI_ERR;
     }
+    // 通过JNIEnv的FindClass函数找到JAVA层的MainActivity类
     jclass clazz = env->FindClass("com/example/myapplication/MainActivity");
     if (clazz == nullptr) {
         return JNI_ERR;
     }
-    if (env->RegisterNatives(clazz, methods, sizeof(methods) / sizeof(methods[0])) < 0) {
+    // 数组长度 sizeof返回一个对象在内存中所占的存储空间，单位是byte
+    jint len = sizeof(methods) / sizeof(methods[0]);
+    // 通过JNIEnv的RegisterNatives函数注册methods数组中的方法
+   	jint registerNativesResult = env->RegisterNatives(clazz, methods, len);
+    if (registerNativesResult < 0) {
         return JNI_ERR;
     }
     return JNI_VERSION_1_6;
@@ -291,11 +328,124 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
 
 JNI 定义了两个关键数据结构，即“JavaVM”和“JNIEnv”。两者本质上都是指向函数表的指针。（在 C++ 版本中，它们是一些类，这些类具有指向函数表的指针，以及通过表间接传递的每个 JNI 函数的成员函数）。JavaVM 提供“调用接口”函数，用于创建和销毁 JavaVM。理论上，每个进程可以有多个 JavaVM，但 Android 只允许有一个。
 
-JNIEnv 提供了大部分 JNI 函数。您的原生函数都会接收 JNIEnv 作为第一个参数，但 `@CriticalNative` 方法除外，请参阅[更快的原生调用](https://developer.android.com/training/articles/perf-jni?hl=zh-cn#fast_critical_native)。
+- JNIEnv 提供了大部分 JNI 函数。您的原生函数都会接收 JNIEnv 作为第一个参数。
 
-该 JNIEnv 将用于线程本地存储。因此，**您无法在线程之间共享 JNIEnv**。如果代码段无法通过其他方法获取其 JNIEnv，您应该共享 JavaVM，并使用 `GetEnv` 发现线程的 JNIEnv。（假设该线程包含一个 JNIEnv；请参阅下面的 `AttachCurrentThread`。）
+- 该 JNIEnv 将用于线程本地存储。因此，**您无法在线程之间共享 JNIEnv**。如果代码段无法通过其他方法获取其 JNIEnv，您应该共享 JavaVM，并使用 `GetEnv` 发现线程的 JNIEnv。
 
-JNIEnv 和 JavaVM 的 C 声明与 C++ 声明不同。`"jni.h"` 包含文件会提供不同的类型定义符，具体取决于该文件是包含在 C 还是 C++ 中。因此，我们不建议在这两种语言包含的头文件中包含 JNIEnv 参数。（换个说法：如果您的头文件需要 `#ifdef __cplusplus`，且该头文件中的任何内容引用 JNIEnv，您可能需要执行一些额外的操作。）
+- JNIEnv 和 JavaVM 的 C 声明与 C++ 声明不同。`"jni.h"` 包含文件会提供不同的类型定义符，具体取决于该文件是包含在 C 还是 C++ 中。因此，我们不建议在这两种语言包含的头文件中包含 JNIEnv 参数。（换个说法：如果您的头文件需要 `#ifdef __cplusplus`，且该头文件中的任何内容引用 JNIEnv，您可能需要执行一些额外的操作。）
+
+#### 实战一：JNI中获取 Java 字段
+
+1. **获取类引用**：首先需要获取包含目标字段的 Java 类的引用。
+2. **获取字段 ID**：使用字段名和签名获取字段的唯一标识（字段 ID）。
+3. **获取字段值**：通过字段 ID 获取字段的值。
+
+**示例代码：**
+
+假设有一个 Java 类 `Student`，包含一个字符串字段 `name`和一个整型字段`age`：
+
+```java
+package com.example.myapplication;
+
+public class Student {
+    
+    public String name;
+    public int age;
+
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+```
+
+以下是如何在 JNI 中获取 `name` 、`age`字段的值：
+
+```c
+#include <jni.h>
+#include <string>
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_myapplication_MainActivity_getStudentFieldFromJNI(JNIEnv* env, jobject obj) {
+    // 获取 Student 类引用
+    jclass cls = env->FindClass("com/example/myapplication/Student");
+
+    // 获取字段 ID
+    jfieldID name_fid = env->GetFieldID(cls, "name", "Ljava/lang/String;");
+    jfieldID age_fid = env->GetFieldID(cls, "age", "I");
+
+    // 获取字段值
+    jstring nameValue = (jstring) env->GetObjectField(obj, name_fid);
+    jint ageValue = (jint) env->GetIntField(obj, age_fid);
+
+    // 将name字段值转换为 C 字符串
+    const char* nameChars = env->GetStringUTFChars(nameValue, nullptr);
+
+    std::cout << "Student name: " << nameChars << ", age: " << ageValue << std::endl;
+
+    // 释放字符串内存
+    env->ReleaseStringUTFChars(nameValue, nameChars);
+}
+```
+
+1. 使用 `FindClass` 获取类的类对象引用
+
+```c
+jclass cls = env->FindClass("com/example/myapplication/Student");
+```
+
+2. 使用 `GetFieldID` 获取字段的字段 ID
+
+```c
+jfieldID name_fid = env->GetFieldID(cls, "name", "Ljava/lang/String;");
+jfieldID age_fid = env->GetFieldID(cls, "age", "I");
+```
+
+`GetFieldID` 函数获取一个字段的 ID。参数包括：
+
+- `cls`：类引用。
+- `"name"`、`"age"`：字段名。
+- `"Ljava/lang/String;"`、`"I"`：字段的签名（类型描述符），这里是分别是 `String` 类型和`int`类型的签名。
+
+3. 使用适当内容获取字段的内容，例如 `GetIntField`
+
+```c
+/** 获取到Java类中的字段值 */
+jstring nameValue = (jstring) env->GetObjectField(obj, name_fid);
+jint ageValue = (jint) env->GetIntField(obj, age_fid);
+```
+
+`GetObjectField` 函数获取对象类型字段的值。对于基本数据类型，可以使用 `GetIntField`、`GetBooleanField` 等函数。
+
+4. 处理字段值
+
+    ```c
+    const char* nameChars = env->GetStringUTFChars(nameValue, nullptr);
+    ```
+
+    `GetStringUTFChars` 函数将 `jstring` 转换为 C 字符串。
+
+5. 释放内存
+
+    ```c
+    env->ReleaseStringUTFChars(nameValue, nameChars);
+    ```
+
+    `ReleaseStringUTFChars` 函数释放 `GetStringUTFChars` 分配的内存。
+
+### 4、JNI中常用函数
+
+> JNIENV在C语言和C++中调用方式是有区别的：
+>
+> ```
+> C风格：(*env)->NewStringUTF(env, “Hellow World!”);
+> 
+> C++风格：env->NewStringUTF(“Hellow World!”);
+> ```
+>
+> 注：C++风格其实就是对C风格的再次封装
+
+
 
 ## 四、CMake
 
