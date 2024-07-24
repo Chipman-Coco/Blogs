@@ -43,29 +43,29 @@
 
 2. 依次选择 **File > Settings > Appearance & Behavior > System Settings > Android SDK**。
 
-<img src="C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525095624980.png" alt="image-20240525095624980" style="zoom:80%;" />
+<img src="https://github.com/Chipman-Coco/Blogs/blob/main/hellondk/img/image-20240525095624980.png?raw=true" alt="image-20240525095624980" style="zoom:80%;" />
 
-<img src="C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525100424726.png" alt="image-20240525100424726" style="zoom:80%;" />
+<img src="https://github.com/Chipman-Coco/Blogs/blob/main/hellondk/img/image-20240525100424726.png?raw=true" alt="image-20240525100424726" style="zoom:80%;" />
 
 3. 在 **SDK Tools** 选项卡下，展开 **NDK (Side by side)** 和 **CMake**，各自选择其中一个版本勾选（可以选择最新版本），然后点击 **Apply**。
 
-   ![image-20240525100553129](C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525100553129.png)
+   ![image-20240525100553129](D:/Android/Blogs/hellondk/image-20240525100553129.png)
 
-   ![image-20240525100642329](C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525100642329.png)
+   ![image-20240525100642329](D:/Android/Blogs/hellondk/image-20240525100642329.png)
 
 ### **2、创建新项目并配置NDK**
 
 1. 创建一个新的 Android 项目，选择 **Native C++** 模板。
 
-<img src="C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525100736730.png" alt="image-20240525100736730" style="zoom:80%;" />
+<img src="https://github.com/Chipman-Coco/Blogs/blob/main/hellondk/img/image-20240525100736730.png?raw=true" alt="image-20240525100736730" style="zoom:80%;" />
 
 我这里创建的项目名称叫`HelloNdk`，然后点击`Next`。
 
-<img src="C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525100857872.png" alt="image-20240525100857872" style="zoom:80%;" />
+<img src="https://github.com/Chipman-Coco/Blogs/blob/main/hellondk/img/image-20240525100857872.png?raw=true" alt="image-20240525100857872" style="zoom:80%;" />
 
 最后直接点击`Finish`，然后等待工程创建完成即可。
 
-<img src="C:\Projects\AndroidStudioProjects\PersonalDemo\Blogs\hellondk\img\image-20240525101236277.png" alt="image-20240525101236277" style="zoom:80%;" />
+<img src="https://github.com/Chipman-Coco/Blogs/blob/main/hellondk/img/image-20240525101236277.png?raw=true" alt="image-20240525101236277" style="zoom:80%;" />
 
 2. 在创建的项目 `app/build.gradle` 文件中，会包含以下配置：
 
@@ -463,6 +463,8 @@ jint ageValue = (jint) env->GetIntField(obj, age_fid);
 8. **`file`**：操作文件，如生成、读取、写入等。
 9. `message`：在配置过程中输出消息，用于调试。
 10. `if` 和 `endif`：条件判断，用于控制配置过程中的逻辑。
+
+> 目前暂时只总结这些内容了，后续再不断补充完善吧
 
 
 
