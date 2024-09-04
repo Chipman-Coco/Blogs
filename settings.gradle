@@ -23,3 +23,5 @@ rootProject.name = "Blogs"
 include ':app'
 include ':nativelib'
 include ':hellondk'
+include ':helloaidl'
+include ':server'
